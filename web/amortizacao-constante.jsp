@@ -16,7 +16,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h1>Tabela Price</h1>
+                    <h1>Amortização Constante</h1>
                     <form action="amortizacao-constante.jsp" method="GET">
                         <div class="form-group">
                             <label for="valor">Valor do empréstimo (R$): </label>
