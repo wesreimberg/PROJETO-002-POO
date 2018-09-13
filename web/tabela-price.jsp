@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h1>Tabela Price</h1>
-                    <form action="" method="GET">
+                    <form action="tabela-price.jsp" method="GET">
                         <div class="form-group">
                             <label for="valor">Valor do empréstimo (R$): </label>
                             <input class="form-control" id="valor" type="number" step="0.5" name="valor" placeholder="Digite o Empréstimo em Reais (R$)" title="Digite o Empréstimo em Reais (R$)" required>
