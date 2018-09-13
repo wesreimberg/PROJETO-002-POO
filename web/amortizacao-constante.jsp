@@ -13,7 +13,7 @@
     </head>
     <body>
         <%@include file="WEB-INF/jspf/menu.jspf" %>
-        <div class="container">
+        <div class="container py-5">
             <div class="row">
                 <div class="col-md-6">
                     <h1>Amortização Constante</h1>
