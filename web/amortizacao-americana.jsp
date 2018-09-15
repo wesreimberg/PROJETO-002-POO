@@ -14,7 +14,7 @@
     </head>
     <body>
         <%@include file="WEB-INF/jspf/menu.jspf" %>
-        <div class="container py-5">
+        <div class="container py-5 height-ajust">
             <div class="row">
                 <div class="col-md-6">
                     <h1>Amortização Americana</h1>
