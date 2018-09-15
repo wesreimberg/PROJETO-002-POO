@@ -4,6 +4,7 @@
     Author     : Weslley
 --%>
 
+<%@page import="java.text.NumberFormat"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h1>Amortização Americana</h1>
-                    <form action="amortizacao-constante.jsp" method="GET">
+                    <form action="amortizacao-americana.jsp" method="GET">
                         <div class="form-group">
                             <label for="valor">Valor do empréstimo (R$): </label>
                             <input class="form-control" id="valor" type="number" step="0.5" name="valor" placeholder="Digite o Empréstimo em Reais (R$)" title="Digite o Empréstimo em Reais (R$)" required>
@@ -37,44 +38,89 @@
                     </form>
                 </div>
                 <div class="col-md-6">
+
+
+                    <%
+                        NumberFormat moeda = NumberFormat.getCurrencyInstance();
+                        try {
+                            int tempo = Integer.parseInt(request.getParameter("tempo"));
+                            Double valor = Double.parseDouble(request.getParameter("valor"));
+                            Double taxa = Double.parseDouble(request.getParameter("taxa"))/100;
+                            double tj = 0;
+                            double tp = 0;
+                    %>
                     <h2>Resultado</h2>
                     <div class="table-responsive-sm">
                         <table class="table table-striped table-bordered mw-100">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
                                     <th>Mês</th>
-                                    <th class="text-center">Prestação</th>
-                                    <th class="text-center">Juros</th>
-                                    <th class="text-center">Amortização</th>
-                                    <th class="text-center">Saldo Devedor</th>
+                                    <th>Saldo Devedor</th>
+                                    <th>Amortização</th>
+                                    <th>Juros</th>
+                                    <th>Prestação</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <% for (int i = 0; i <= tempo; i++) {%>
                                 <tr>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center"><%= i%></td>
+                                    <td>
+                                        <%-- Saldo Devedor --%>
+                                        <% if (i == tempo) {%>
+                                        <%= moeda.format(0)%>
+                                        <%} else {%>
+                                        <%=moeda.format(valor)%>
+                                        <%}%>
+                                    </td>
+                                    <td>
+                                        <%-- Amortização --%>
+                                        <% if (i == tempo) {%>
+                                        <%= moeda.format(valor)%>
+                                        <% } else {%>
+                                        <%= moeda.format(0)%>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <%-- Juros --%>
+                                        <%if (i == 0) {%>
+                                        <%= moeda.format(0)%>
+                                        <%} else {%>
+                                        <% tj = taxa * valor * tempo;%>
+                                        <%= moeda.format(taxa * valor)%>
+                                        <%--<%= (double)3/100 %>--%>
+                                        <%}%>
+                                    </td>
+                                    <td>
+                                        <%--Prestacao--%>
+                                        <%if (i == 0) {%>
+                                        <%= moeda.format(0)%>
+                                        <% } else if (i < tempo) {%>
+                                        <% tp = valor + tj;%>
+                                        <%= moeda.format(taxa * valor)%>
+                                        <%} else {%>
+                                        <%= moeda.format(valor + (taxa * valor))%>
+                                        <%}%>
+                                    </td>
                                 </tr>
+                                <% }%>
+                            <tfoot class="text-center">
                                 <tr>
-                                    <td>2</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            <tfoot>
-                                <tr>
-                                    <th>TOTAL</th>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <th colspan="2">TOTAL</th>
+                                    <td><%=moeda.format(valor)%></td>
+                                    <td><%=moeda.format(tj)%></td>
+                                    <td><%=moeda.format(tp)%></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
+                    <%
+                        } catch (Exception e) {
+                            %>
+                            <h3>O resultado irá aparecer aqui.</h3>
+                            <%
+                        }
+                    %>
                 </div>
             </div>
         </div>
