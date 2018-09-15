@@ -32,54 +32,77 @@
                             <input class="form-control" id="tempo" type="number" step="1" name="tempo" placeholder="Digite o tempo em Meses" title="Digite o tempo em Meses" required>
                         </div>
                         <div class="form-group text-center">
-                            <a class="btn btn-lg btn-default"  href="/PROJETO-002-POO/amortizacao-constante.jsp">Limpar</a>
-                            <button class="btn btn-dark" texttype="submit" name="calcular">Calcular</button>
+                            <button class="btn btn-lg btn-default" type="reset">Limpar Campos</button>
+                            <button class="btn btn-lg btn-dark" texttype="submit" name="calcular">Calcular</button>
                         </div>
                     </form>
                 </div>
                 <div class="col-md-6">
                     <h2>Resultado</h2>
                     <div class="table-responsive-sm">
-                        <%  if(request.getParameter("calcular")!=null){
-                                out.print("<table class = \"table table-striped table-bordered mw-100\">"
-                                        + "<thead>"
-                                        + "<tr>"
-                                        + "<th class=\"text-center\">#</th>"
-                                        + "<th class=\"text-center\">Prestação</th>"
-                                        + "<th class=\"text-center\">Juros</th>"
-                                        + "<th class=\"text-center\">Amortização</th>"
-                                        + "<th class=\"text-center\">Saldo Devedor</th>"
-                                        + "</tr></thead><tr>");
-                                
-                                    int tempo = Integer.parseInt(request.getParameter("tempo"));
-                                    double juros = Double.parseDouble(request.getParameter("taxa"));
-                                    double valor = Double.parseDouble(request.getParameter("valor"));
-                                    double saldo;
-                                    double amortizacao = valor/tempo;
-                                    double prestacao = 0;
-                                    double result1 = 0, result2 = 0, result3 = 0;
-                                    DecimalFormat f = new DecimalFormat("###,###.##");
-                                    //double saldo = 0;
-                                    for (int i = 0; i < tempo; i++) {
-                                        saldo = valor - (i * amortizacao);
-                                        prestacao = amortizacao + (juros/100)*saldo;
-                                        //saldo = valor-prestacao;
-                                        out.print("<td>"+(i+1)+"</td>");
-                                        out.print("<td>"+f.format(prestacao)+"</td>");
-                                        out.print("<td>"+f.format(saldo*(juros/100))+"</td>");
-                                        out.print("<td>"+f.format(amortizacao)+"</td>");
-                                        out.print("<td>"+f.format(saldo-amortizacao)+"</td></tr>");
-                                        result1 += prestacao;
-                                        result2 += saldo*(juros/100);
-                                        result3 +=amortizacao;
-                                        
-                                    }
-                                    out.print("<tr><td>>></td><td>"+f.format(result1)+"</td>");
-                                    out.print("<td>"+f.format(result2)+"</td>");
-                                    out.print("<td>"+f.format(result3)+"</td>");
-                                    out.print("<td>Total</td></tr>");
-                                    out.print("</table>");
-                        }  
+                        <%  if (request.getParameter("calcular") != null) {%>
+                        <table class="table table-striped table-bordered mw-100">
+                            <thead>
+                                <tr>
+                                    <th class=\"text-center\">#</th>
+                                    <th class=\"text-center\">Prestação</th>
+                                    <th class=\"text-center\">Juros</th>
+                                    <th class=\"text-center\">Amortização</th>
+                                    <th class=\"text-center\">Saldo Devedor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <%
+                                        int tempo = Integer.parseInt(request.getParameter("tempo"));
+                                        double juros = Double.parseDouble(request.getParameter("taxa")) / 100;
+                                        double valor = Double.parseDouble(request.getParameter("valor"));
+                                        double saldo;
+                                        double amortizacao = valor / tempo;
+                                        double prestacao = 0;
+                                        double result1 = 0, result2 = 0, result3 = 0;
+                                        DecimalFormat f = new DecimalFormat("###,###.##");
+                                        //double saldo = 0;
+                                        saldo = valor;
+
+                                        for (int i = 0; i <= tempo; i++) {
+                                            prestacao = amortizacao + juros * saldo;
+                                            if (i == 0) {
+                                    %>
+                                    <td><%= i%></td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td><%= valor%></td>
+                                    <%
+                                    } else {
+                                        saldo = saldo - amortizacao;
+                                    %>
+                                    <td><%= i%></td>
+                                    <td><%= f.format(prestacao)%></td>
+                                    <td><%= f.format(prestacao - amortizacao)%></td>
+                                    <td><%= f.format(amortizacao)%></td>
+                                    <td><%= f.format(saldo)%></td>
+                                    <%
+                                            result3 += amortizacao;
+                                            result1 += prestacao;
+                                        }
+                                        result2 += saldo * juros;
+                                    %>
+                                </tr>
+                                <% }%>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <td><%= f.format(result1)%></td>
+                                    <td><%= f.format(result2)%></td>
+                                    <td><%= f.format(result3)%></td>
+                                    <td><%= f.format(0)%></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <%   }
                         %>
                     </div>
                 </div>
