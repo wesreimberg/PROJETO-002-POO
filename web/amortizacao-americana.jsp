@@ -117,7 +117,7 @@
                     <%
                         } catch (Exception e) {
                             %>
-                            <h3>O resultado irá aparecer aqui.</h3>
+                            <h3>Resultado</h3>
                             <%
                         }
                     %>
