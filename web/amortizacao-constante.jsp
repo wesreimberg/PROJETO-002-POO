@@ -14,7 +14,7 @@
     </head>
     <body>
         <%@include file="WEB-INF/jspf/menu.jspf" %>
-        <div class="container py-5">
+        <div class="container py-5 height-ajust">
             <div class="row">
                 <div class="col-md-6">
                     <h1>Amortização Constante</h1>
@@ -42,13 +42,13 @@
                     <div class="table-responsive-sm">
                         <%  if (request.getParameter("calcular") != null) {%>
                         <table class="table table-striped table-bordered mw-100">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
-                                    <th class=\"text-center\">#</th>
-                                    <th class=\"text-center\">Prestação</th>
-                                    <th class=\"text-center\">Juros</th>
-                                    <th class=\"text-center\">Amortização</th>
-                                    <th class=\"text-center\">Saldo Devedor</th>
+                                    <th>#</th>
+                                    <th>Prestação</th>
+                                    <th>Juros</th>
+                                    <th>Amortização</th>
+                                    <th>Saldo Devedor</th>
                                 </tr>
                             </thead>
                             <tbody>
