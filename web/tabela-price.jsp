@@ -13,7 +13,7 @@
     </head>
     <body>
         <%@include file="WEB-INF/jspf/menu.jspf" %>
-        <div class="container py-5">
+        <div class="container py-5 height-ajust">
             <div class="row">
                 <div class="col-md-6">
                     <h1>Tabela Price</h1>
@@ -37,8 +37,39 @@
                     </form>
                 </div>
                 <div class="col-md-6">
+                    <%
+                        double Capital = 0;
+                        double Taxa = 0;
+                        double Saldodevedor = 0;
+                        double Amortizacao = 0;
+                        double Prestacao = 0;
+                        int Tempo = 0;
+
+                        try {
+                            Capital = Double.parseDouble(request.getParameter("valor"));
+                        } catch (Exception e) {
+
+                        }
+                        try {
+                            Taxa = Double.parseDouble(request.getParameter("taxa"));
+                        } catch (Exception e) {
+                        }
+                        try {
+                            Tempo = Integer.parseInt(request.getParameter("tempo"));
+                        } catch (Exception e) {
+                        }
+                        Taxa = Taxa / 100;
+                        double Linha1 = Capital * Taxa;
+                        double x = Math.pow((1 + Taxa), Tempo);
+                        double Linha2 = 1 - (1 / x);
+                        double totalPrestacao = 0;
+                        double totalJuros = 0;
+                        double totalAmortizacao = 0;
+                        double totalSaldoDevedor = 0;
+                    %>
                     <h2>Resultado</h2>
                     <div class="table-responsive-sm">
+                        <%if (Capital > 0 && Tempo > 0 && Taxa > 0) {%>
                         <table class="table table-striped table-bordered mw-100">
                             <thead>
                                 <tr>
@@ -50,30 +81,45 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <%for (int i = 0; i <= Tempo; i++) {
+                                    
+                                        double Juros = 0;
+
+                                        if (i == 0) {
+                                            Saldodevedor = Capital;
+                                            Prestacao = 0;
+                                            Juros = 0;
+                                            Amortizacao = 0;
+                                        } else {
+                                            Prestacao = Linha1 / Linha2;
+                                            Juros = Saldodevedor * Taxa;
+                                            Saldodevedor = (Saldodevedor + Juros) - Prestacao;
+                                            Amortizacao = Prestacao - Juros;
+                                        }
+                                        totalPrestacao += Prestacao;
+                                        totalJuros += Juros;
+                                        totalAmortizacao += Amortizacao;
+                                        totalSaldoDevedor += Saldodevedor;
+                                %>                
                                 <tr>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><%=i%></td>
+                                    <td><%=String.format("R$ %.2f", Prestacao)%></td>
+                                    <td><%=String.format("R$ %.2f", Juros)%></td>
+                                    <td><%=String.format("R$ %.2f", Amortizacao)%></td>
+                                    <td><%=String.format("R$ %.2f", Saldodevedor)%></td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            <tfoot>
+                                <%}%>
+                            <tfoot class="text-center"
                                 <tr>
                                     <th>TOTAL</th>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
-                                    <td class="text-center"></td>
+                                    <td><%=String.format("R$ %.2f", totalPrestacao)%></td>
+                                    <td><%=String.format("R$ %.2f", totalJuros)%></td>
+                                    <td><%=String.format("R$ %.2f", totalAmortizacao)%></td>
+                                    <td><%=String.format("R$ %.2f", totalSaldoDevedor)%></td>
                                 </tr>
                             </tfoot>
                         </table>
+                        <% } %>
                     </div>
                 </div>
             </div>
